@@ -6,6 +6,17 @@ const findContacts = async () => {
     return contacts
 }
 
+const findContactById = async (id) => {
+    if(!id) return false
+    const contact = await prisma.contact.findFirst({
+        where: {
+            id
+        }
+    })
+
+    return contact
+}
+
 const validations = (data) => {
     const emailIsValid = emailValidator(data.email)
     const phoneIsValid = phoneValidator(data.phone)
@@ -41,20 +52,32 @@ const createContact = async (data) => {
 
 const updateContact = async (id, data) => {
     if(validations(data)) {
-        const updatedUser = await prisma.contact.update({
+        const updatedContact = await prisma.contact.update({
             where: {
                 id
             },
             data
         })
-        return updatedUser
+        return updatedContact
     } else {
         return false
     }
 }
 
+const deleteContact = (id) => {
+    const deletedContact = prisma.contact.delete({
+        where: {
+            id
+        }
+    })
+    
+    return deletedContact
+}
+
 module.exports = {
     findContacts,
     createContact,
-    updateContact
+    updateContact,
+    deleteContact,
+    findContactById
 };
