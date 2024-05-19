@@ -6,7 +6,7 @@ const { userRouter } = require('./routes/users')
 const port = 8080
 
 server.listen(port, () => {
-    console.log("Server running")
+    console.log(`Server running on port ${port}`)
 });
 
 server.use('/health', (req,res) => {
