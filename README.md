@@ -18,7 +18,7 @@ Criar um servidor para armazenar uma agenda de contatos.
 [{ id: 1, name: "John Doo", phone: 99999999999, email: "teste@gmail.com" }]
 ```
 
-### POST /v1/contato (apenas para usuarios logados)
+#### POST /v1/contato (apenas para usuarios logados)
 
 - Adicionar um contato
 
