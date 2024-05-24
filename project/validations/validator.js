@@ -1,16 +1,21 @@
 const validator = require('validator')
 
 const emailValidator = (input) => {
-    const isValid = validator.isEmail(input)
-    return isValid
-};
+    return validator.isEmail(input)
+}
 
 const phoneValidator = (phone) => {
-    const isValid = validator.isMobilePhone(phone, "any")
-    return isValid
-};
+    return validator.isMobilePhone(phone, "any")
+}
+
+const passwordValidator = (password) => {
+    let regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+    return regex.test(password) ? true : false
+}
 
 module.exports = {
     emailValidator,
-    phoneValidator
+    phoneValidator,
+    passwordValidator
 }
