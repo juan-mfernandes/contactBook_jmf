@@ -1,6 +1,8 @@
 ﻿# Agenda de Contatos
-## Objetivos
+ 
+------------------------------------------------------------------------
 
+## Objetivos
 Criar um servidor para armazenar uma agenda de contatos.
 ### Rotas
 #### POST /v1/login
@@ -79,3 +81,9 @@ Response:
 - bcrypt ( https://www.npmjs.com/package/bcrypt )
 - jsonwebtoken ( https://www.npmjs.com/package/jsonwebtoken )
 - nodemon ( https://www.npmjs.com/package/nodemon )
+
+------------------------------------------------------------------------
+
+###### Infos
+Projeto de Programação Web Back-end 1
+Análise e Desenvolvimento de Sistemas 3/5
