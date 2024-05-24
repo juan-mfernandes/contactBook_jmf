@@ -1,21 +1,6 @@
 const { prisma } = require('./prisma')
 const { emailValidator, phoneValidator } = require('../validations/validator')
-
-const findContacts = async () => {
-    const contacts = await prisma.contact.findMany()
-    return contacts
-}
-
-const findContactById = async (id) => {
-    if(!id) return false
-    const contact = await prisma.contact.findFirst({
-        where: {
-            id
-        }
-    })
-
-    return contact
-}
+const { ValidationError, NotFoundError } = require('../errors/customErrors')
 
 const validations = (data) => {
     const emailIsValid = emailValidator(data.email)
@@ -35,39 +20,73 @@ const validations = (data) => {
     }
 }
 
-const createContact = async (data) => { 
-    if(validations(data) !== false) {
-        const newContact = prisma.contact.create({
-            data: {
-                name : data.name,
-                email: data.email,
-                phone: data.phone
+const findContacts = async (userId) => {
+    const contacts = await prisma.contact.findMany({
+        where: {
+            userId
+        },
+        include: {
+            user: {
+                select: {
+                    email: true
+                }
             }
-        });
+        }
+    })
+    return contacts
+}
+
+const findContactById = async (id, userId) => {
+    const contact = await prisma.contact.findFirst({
+        where: {
+            id,
+            userId
+        }
+    })
+    
+    if(!contact) throw new NotFoundError("Id not found")
+
+    return contact
+}
+
+const createContact = async (data, userId) => {
+    const validData = validations(data)
+    if(validData !== false) {
+        const newContact = await prisma.contact.create({
+            data: {
+                ...validData,
+                user: {
+                    connect: { id: userId }
+                }
+            }
+        })
         return newContact
     } else {
-        return false
+        throw new ValidationError("Invalid Data Format")
     }
 }
 
-const updateContact = async (id, data) => {
+const updateContact = async (id, data, userId) => {
     if(validations(data)) {
         const updatedContact = await prisma.contact.update({
             where: {
-                id
+                id,
+                userId
             },
             data
         })
         return updatedContact
     } else {
-        return false
+        throw new ValidationError("Invalid data format")
     }
 }
 
-const deleteContact = (id) => {
-    const deletedContact = prisma.contact.delete({
+const deleteContact = async (id, userId) => {
+    if(!id) throw new NotFoundError("Id not found")
+    const deletedContact = await prisma.contact.delete({
         where: {
-            id
+            id,
+            userId
         }
     })
     
@@ -80,4 +99,4 @@ module.exports = {
     updateContact,
     deleteContact,
     findContactById
-};
+}

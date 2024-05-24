@@ -4,11 +4,11 @@ const loginAuth = (req, res, next) => {
     try {
         const token = req.headers.authorization
         if(!token)return res.status(404).json({error: "Token not found"})
-        jwt.verify(token, process.env.SECRET)
+        const payload = jwt.verify(token, process.env.SECRET)
+        req.user = payload.id
         next()
     }catch(err){
-        console.log(err)
-        res.status(401).json({message:"Invalid Token"})
+        res.status(401).json({error:"Invalid Token"})
     }
 }
 

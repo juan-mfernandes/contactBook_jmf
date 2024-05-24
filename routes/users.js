@@ -7,22 +7,23 @@ userRouter.post("/register", async(req, res) => {
     const data = req.body
     try {
         const newUser = await createUser(data)
-        res.status(202).json(newUser)
+        res.status(201).json(newUser)
     }catch(err){
         const statusCode = getHttpStatusCode(err)
-        res.status(statusCode).json({error: err.message})
+        return res.status(statusCode).json({error: err.message})
     }
 })
 
 userRouter.post("/login", async(req, res) => {
+    const {email, password} = req.body
     try {
-        const data = req.body
-        const token = await login(data)
-        const loginMessage = `Welcome, sr(a) ${token.userName}`
-        res.status(200).json({loginMessage, token: token.token})
+        const user = await login(email, password)
+        const loginMessage = `Welcome, ${user.userName}`
+        res.status(200).json({loginMessage, token: user.token})
     }catch(err){
-        const statusCode = getHttpStatusCode(err)
-        res.status(statusCode).json({error: err.message})
+        console.log(err)
+        const statusCode = await getHttpStatusCode(err)
+        return res.status(statusCode).json({error: err.message})
     }
 })
 
