@@ -15,6 +15,7 @@ model User {
   name String
   email String @unique
   password String
+  contacts Contact[]
 }
 
 model Contact {
@@ -22,4 +23,6 @@ model Contact {
   name String
   email String @unique
   phone String
+  userId Int
+  user User @relation(fields: [userId], references: [id])
 }
